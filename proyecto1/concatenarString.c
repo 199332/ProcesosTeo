@@ -1,8 +1,19 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+//declaarar una funcion, es mas correcto aquí escribir el nombre de la funcion y 
+// al final desarrollarla
+/*void imprimirHolaMundo(){
+    fprintf(stdout,"Hola munco\n");
+}*/
+void imprimirHolaMundo();
+void imprimirASCIIhasta(char a);
 int main(int argc, char const *argv[])
 {
+    //llamar una función
+    imprimirHolaMundo;
+    //imprimir caracteres
+    imprimirASCIIhasta('s');
     /*concatenar dos string */
 //no necesito indicarle los caracteres porque se los asigna el 
     char cad1[]="Hola";
@@ -24,7 +35,22 @@ int main(int argc, char const *argv[])
     cadRes = strcat(cadRes,cad3);
 
     fprintf(stdout,"%s\n", cadRes);
-    fprintf(stdout,"$d\n",tamTotal);
+   // fprintf(stdout,"$d\n",tamTotal);
 
     return 0;
+}
+//declarar funciones aquí
+void imprimirHolaMundo(){
+    fprintf(stdout,"Hola munco\n");
+}
+
+void imprimirASCIIhasta(char a){
+    //el bucle que crea por defecto no vale cambiar la variable i a tipo int
+
+    for(int i = 1; i < a; i++)
+    {
+        /* code */
+        fprintf(stdout,"caracter = %c numero = %d\n",i,i);
+    }
+    
 }
