@@ -1,17 +1,47 @@
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 int main(int argc, char const *argv[])
-{   //creo una variable de tipo FILE con la que habriré el archivo
+{  
+    int padreHijo;
+
+    pid_t pid;
+     //creo una variable de tipo FILE con la que habriré el archivo
     FILE *archivo;
     FILE *archivoNuevo;
-    archivoNuevo = fopen("texto_A.txt","w"); 
+    //comienzo los dos procesos
+    //se puede poner el fork()solo?
+    pid = fork();
+    
+   if (pid == 0) {
+    printf("Hola soy el hijo %d\n",getpid()); 
     //con este if abro el documento de texto en la variable y compruebo que no este vacío o
     // que no lo encuentre
     if ((archivo = fopen("texto.txt","r"))== NULL) {
         perror("la ruta del fichero es erronea");
-    }    
+    }
+    sleep(1);
 
-    //char letraClave = argv[2]; será argc??
+ }else 
+ if (pid == -1) {
+    fprintf(stderr, "se a producido un error");
+    exit(-1);
+ } 
+ else
+ {
+    printf("Hola soy el padre %d, el hijo que he creado es %d\n",getpid(),pid);
+    
+    wait(NULL);
+    
+    
+ }
+    
+    
+    archivoNuevo = fopen("texto_A.txt","w"); 
+        
+
+    //char letraClave = argv[2];
     char letraClave = 'a';
     //esta variable va ir almacenando cada caracter que se va a leer
     printf("la letra clave es: %c\n",letraClave);
