@@ -9,15 +9,15 @@ int main(int argc, char const *argv[])
     }
     
     //char letra = argv[1];
-    int leo;
-    leo = fgetc(archivo);
-    
-    while(leo!=EOF){
+    //char[80] leo;
+    //leo = fgetc(archivo);
+    char leer;
+    while((leer=fgetc(archivo))!=EOF){
        
-           printf("hola %s", leo);
+           printf("%c", leer);
 
     }
-    
+    printf("\n");
     
     
 
