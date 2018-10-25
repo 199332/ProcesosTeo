@@ -2,9 +2,7 @@
 
 int main(int argc, char const *argv[])
 {   //creo una variable de tipo FILE con la que habriré el archivo
-    FILE *archivo;
-    FILE *archivoNuevo;
-    archivoNuevo = fopen("texto_A.txt","w"); 
+    FILE *archivo;    
     //con este if abro el documento de texto en la variable y compruebo que no este vacío o
     // que no lo encuentre
     if ((archivo = fopen("texto.txt","r"))== NULL) {
@@ -20,20 +18,15 @@ int main(int argc, char const *argv[])
     //EOF  sale del bucle
     while((leer=fgetc(archivo))!=EOF){
         //muestro por pantalla cada caracter
-        //printf("%c", leer);
-        //comparo con el caracter que no quiero copiar y copio
-        if (leer != letraClave) {
-            printf("%c", leer);
-            fputc(leer, archivoNuevo);
-        }else  {
-            //printf("%c", leer);
-        }       
+        printf("%c", leer);   
         
     }
     printf("\n");
-    //cierro los ficheros
+    //cierro el fichero
     fclose(archivo);
-    fclose(archivoNuevo);
+    
+
+
 
     return 0;
 }
