@@ -4,24 +4,22 @@
 
 int main(int argc, char const *argv[])
 {  
-    int padreHijo;
+    int padreHijo[2];
 
     pid_t pid;
+    
      //creo una variable de tipo FILE con la que habriré el archivo
     FILE *archivo;
     FILE *archivoNuevo;
+    
     //comienzo los dos procesos
     //se puede poner el fork()solo?
     pid = fork();
     
    if (pid == 0) {
     printf("Hola soy el hijo %d\n",getpid()); 
-    //con este if abro el documento de texto en la variable y compruebo que no este vacío o
-    // que no lo encuentre
-    if ((archivo = fopen("texto.txt","r"))== NULL) {
-        perror("la ruta del fichero es erronea");
-    }
     sleep(1);
+    wait(NULL);
 
  }else 
  if (pid == -1) {
@@ -31,8 +29,21 @@ int main(int argc, char const *argv[])
  else
  {
     printf("Hola soy el padre %d, el hijo que he creado es %d\n",getpid(),pid);
+    //con este if abro el documento de texto en la variable y compruebo que no este vacío o
+    // que no lo encuentre
+    if ((archivo = fopen("texto.txt","r"))== NULL) {
+        perror("la ruta del fichero es erronea");
+    }
+    char leer;
+    char[] texto;
+    //leo el fichero dandole valor a la variable leer y cuando llega al final 
+    //EOF  sale del bucle
+    while((leer=fgetc(archivo))!=EOF){
+        //muestro por pantalla cada caracter
+        //printf("%c", leer);
+         write(padreHijo[1],&mensaje,sizeof(int));
+        }
     
-    wait(NULL);
     
     
  }
