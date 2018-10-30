@@ -63,20 +63,41 @@ int main(int argc, char const *argv[])
         perror("la ruta del fichero es erronea");
     }
     char leer;
-    char* texto;
-    int contador =0;  
+    int contador =0;
+    int tamano =0;  
     //leo el fichero dandole valor a la variable leer y cuando llega al final 
     //EOF  sale del bucle
     leer=fgetc(archivo);
     while((leer=fgetc(archivo))!=EOF){
         //muestro por pantalla cada caracter
-        printf("%c\n", leer);
-        texto[contador] = leer;
-        contador++;
-         
+        printf("%c lee el caracter\n", leer);
+        //texto[contador] = leer;
+        tamano++;        
          //wait(NULL);
          //sleep(1);
-        }    
+        }
+        char texto[tamano+1];
+         while((leer=fgetc(archivo))!=EOF){
+        //muestro por pantalla cada caracter
+        
+        texto[contador] = leer;
+        printf("primer caracter = %c\n",texto[contador]);
+        contador++;        
+         //wait(NULL);
+         //sleep(1);
+        }
+        printf("acaba el segundo while\n");
+        printf("tamaño array = %d\n",sizeof(texto));
+        //printf("primer caracter = %c\n",texto);
+        for(int i = 0; i < sizeof(texto); i++){
+        
+        
+             printf("%c lee el el array\n", texto[i]); 
+        
+                
+        }
+           
+         
         //sizeof igual es char
         write(padreHijo[1],&texto,sizeof(int));
  }//fin padre
