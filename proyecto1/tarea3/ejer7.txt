@@ -1,0 +1,7 @@
+hola=hello
+adios=bye
+hola=hello
+adios=bye
+.-=.-
+hello=hola
+.-hola=hello
