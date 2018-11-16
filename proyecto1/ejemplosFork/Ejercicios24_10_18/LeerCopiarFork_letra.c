@@ -18,34 +18,37 @@ int main(int argc, char const *argv[])
     //abro los archivos y les doy permisos
     //archivo = fopen("texto.txt","r");
     archivo = fopen(argv[1],"r");
-    archivoNuevo = fopen("texto_fork.txt","w"); 
-    
+    archivoNuevo = fopen("texto_fork2_A.txt","w"); 
+    //cojo la letra que se le pasa por parametro y que no deseo copiar en el nuevo fichero
+    char letraClave = argv[2][0];
   //comienzo los dos procesos
     pid = fork();
     
    if (pid == 0) {//PROCESO HIJO recibe caracter y escribe en el fichero nuevo
     //espera a que se ejecute el proceso padre 
      wait(NULL);
+     
      //muestra el identificador del hijo
      printf("Hola soy el hijo %d\n",getpid());     
     //array que va almacenar el array que le he enviado por la tubería
-    char texto2[1000];
+    char texto2;
     //leo la tubería, padreHijo[0]para leer, sizeof(texto2) indica el tamaño del array
-    read(padreHijo[0], texto2, sizeof(texto2));
+    read(padreHijo[0], &texto2, sizeof(int));
+    //compruebo dentro de un bucle cuando manda el final del fichero y voy leyendo y escribiendo
+    //caracter a caracter
+    while(texto2!=EOF){   
     //muestra el mensaje recibido
-    printf("Hijo: Leído %s del pipe.\n", texto2);
-    //escribo el fichero caracter a caracter y cuando leo el caracter añadido al final
-    //dejo de escribir
-    for(int i = 0; i < sizeof(texto2); i++) {       
-        //condición para salir del final del fichero
-        if (texto2[i]=='^') {
-            break;
-        }
-        //muestra los caracteres que va leyendo uno a uno
-        //printf("%c\n", texto2[i]);
-        //escribo el nuevo fichero pero NO añado el caracter que añadi para saber el fin del ficheero  
-        fputc(texto2[i], archivoNuevo);      
+    printf("Hijo: Leído %c del pipe.\n", texto2);
+    //compruebo cada caracter para solo escribir los caracteres que deseo
+    if (texto2 != letraClave) {
+        //escribo el caracter en el fichero
+        fputc(texto2, archivoNuevo);
     }   
+    //leo la tubería
+    read(padreHijo[0], &texto2, sizeof(int));
+    //lo para un segundo para que vaya al proceso padre
+    sleep(1);
+    }
 //fin proceso hijo
  }else if (pid == -1) {//si no se consigue crear el fork se muestra el siguiente error y se finaliza todo
     fprintf(stderr, "se a producido un error");
@@ -59,39 +62,24 @@ int main(int argc, char const *argv[])
         perror("la ruta del fichero es erronea");
     }
     char leer;//variable para leer caracter a caracter
-    int contador =0;//para ir moviendome en el array tipo char
-      
-    char texto[1000];//va a recoger los caracteres del fichero
-    //leo el fichero dandole valor a la variable leer y cuando llega al final 
-    //EOF  sale del bucle    
+    //leo el fichero hasta el final caracter a caracter
     while((leer=fgetc(archivo))!=EOF){
         //muestro por pantalla cada caracter
         printf("%c lee el caracter\n", leer);
-        //voy rellenando el array con los caracteres
-        texto[contador] = leer;
-        //compruebo que se añaden correctamente
-        //printf("primer caracter = %c\n",texto[contador]);
-        contador++;         
-        }
-        //le añado este caracter para identificar el final del fichero
-        texto[contador]= '^';
         
-        printf("acaba el while\n");
-        //muestra el tamaño del array
-        printf("tamaño array = %d\n",sizeof(texto));
-        //imprime el array como un string
-        printf("primer caracter = %s\n",texto);
-        /*prueba para ver que el array se ha escrito bien
-        for(int i = 0; i < sizeof(texto); i++){            
-            if (texto[i]=='^') {
-              break;
-            }                
-            printf("%c lee el el array\n", texto[i]);
-        }*/       
         //escribo a través de la tubería y lo envío al hijo
         //padreHijo[1] lado de la tubería para escribir
         //&texto es el mensaje que envío y sizeof(texto)el tamaño del mensaje
-        write(padreHijo[1],&texto,sizeof(texto));
+        write(padreHijo[1],&leer,sizeof(leer));
+        //lo para para que vaya al hijo y lea y escriba el fichero
+        sleep(1);         
+        }
+        //leo el final EOF y se lo mando para que el hijo sepa que es el final
+        //le añado este caracter para identificar el final del fichero
+        write(padreHijo[1],&leer,sizeof(leer));
+        //vuelvo a pararlo para que vaya al hijo
+        sleep(1);       
+        printf("acaba el while del padre\n");      
  }//fin padre
     //cierro los ficheros 
     fclose(archivo);
